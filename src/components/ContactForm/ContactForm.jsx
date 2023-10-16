@@ -1,48 +1,38 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
 
 import css from './ContactForm.module.css';
 
-export default class ContactForm extends Component {
-  state = {
-    name: '',
-    number: '',
+
+const ContactForm = ({addContact}) => {
+const [fields, setFields] = useState({name: '', number: ''})
+
+  const handleInputChange = event => {
+    setFields({...fields, [event.target.name]: event.target.value})
   };
 
-  handleInputChange = event => {
-    this.setState(prevState => {
-      return {
-        [event.target.name]: event.target.value,
-      };
-    });
-  };
+  const handleSubmit = event => {
 
-  handleSubmit = event => {
     event.preventDefault();
 
-    const cotactData = {
+    const contactData = {
       id: nanoid(),
-      name: this.state.name,
-      number: this.state.number,
-    };
+      name: fields.name,
+      number: fields.number,
+      }
 
-    this.props.addContact(cotactData);
+    addContact(contactData);
 
-    this.setState( {
-      name: '',
-      number: '',
-    }
-    );
-  };
-
-  render() {
+    setFields({name: '', number: ''});
+  }
+  
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <label>
           <span className={css.title}>Name</span>
           <input
-            onChange={this.handleInputChange}
-            value={this.state.name}
+            onChange={handleInputChange}
+            value={fields.name}
             type="text"
             name="name"
             required
@@ -51,8 +41,8 @@ export default class ContactForm extends Component {
         <label>
           <span className={css.title}>Number</span>
           <input
-            onChange={this.handleInputChange}
-            value={this.state.number}
+            onChange={handleInputChange}
+            value={fields.number}
             type="tel"
             name="number"
             required
@@ -62,6 +52,70 @@ export default class ContactForm extends Component {
           <button type="submit">Add contact</button>
         </span>
       </form>
-    );
-  }
+    )
 }
+
+  export default ContactForm
+
+// export default class ContactForm extends Component {
+//   state = {
+//     name: '',
+//     number: '',
+//   };
+
+//   handleInputChange = event => {
+//     this.setState(prevState => {
+//       return {
+//         [event.target.name]: event.target.value,
+//       };
+//     });
+//   };
+
+//   handleSubmit = event => {
+//     event.preventDefault();
+
+//     const cotactData = {
+//       id: nanoid(),
+//       name: this.state.name,
+//       number: this.state.number,
+//     };
+
+//     this.props.addContact(cotactData);
+
+//     this.setState( {
+//       name: '',
+//       number: '',
+//     }
+//     );
+//   };
+
+//   render() {
+//     return (
+//       <form onSubmit={this.handleSubmit}>
+//         <label>
+//           <span className={css.title}>Name</span>
+//           <input
+//             onChange={this.handleInputChange}
+//             value={this.state.name}
+//             type="text"
+//             name="name"
+//             required
+//           />
+//         </label>
+//         <label>
+//           <span className={css.title}>Number</span>
+//           <input
+//             onChange={this.handleInputChange}
+//             value={this.state.number}
+//             type="tel"
+//             name="number"
+//             required
+//           />
+//         </label>
+//         <span className={css.btn}>
+//           <button type="submit">Add contact</button>
+//         </span>
+//       </form>
+//     );
+//   }
+// }
